@@ -1,25 +1,94 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
+    <!-- Configuración del documento -->
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-    <title>Covertidor De Temperatura</title>
+
+    <!-- Información de la página -->
+    <meta
+        name="description"
+        content="Conversor de temperaturas entre Celsius, Fahrenheit y Kelvin."
+    >
+
+    <meta name="author" content="andres">
+
+    <!-- Título y recursos -->
+    <title>Conversor de Temperaturas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
 </head>
+
 <body>
-    <div class="caja" id="caja">
-        <div class="elementos">
-            <h1>Covertidor De Temperatura</h1>
-            <span>Celcius</span><br>
-            <input type="text" id="celcius" value="0"><br>
-            <span>Fahrenheit</span><br>
-            <input type="text" id="fahrenheit" ><br>
-            <span>Kelvin</span><br>
-            <input type="text" id="kelvin" >
-        </div>
-    </div>
-    <script src="main.js"></script>
+
+    <!-- Contenedor principal de la aplicación -->
+    <main class="caja" id="caja">
+
+        <section class="elementos" aria-labelledby="titulo">
+
+            <!-- Encabezado -->
+            <header>
+                <h1 id="titulo">Conversor de Temperaturas</h1>
+
+                <p>
+                    Introduce una temperatura para convertirla
+                    automáticamente a las otras unidades.
+                </p>
+            </header>
+
+            <!-- Formulario de conversión -->
+            <form id="formulario-conversor">
+
+                <!-- Celsius -->
+                <div class="grupo-campo">
+                    <label for="celsius">Celsius (°C)</label>
+
+                    <input
+                        id="celsius"
+                        name="celcius"
+                        step="any"
+                        inputmode="decimal"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- Fahrenheit -->
+                <div class="grupo-campo">
+                    <label for="fahrenheit">Fahrenheit (°F)</label>
+
+                    <input
+                        id="fahrenheit"
+                        name="fahrenheit"
+                        step="any"
+                        inputmode="decimal"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- Kelvin -->
+                <div class="grupo-campo">
+                    <label for="kelvin">Kelvin (K)</label>
+
+                    <input
+                        id="kelvin"
+                        name="kelvin"
+                        step="any"
+                        inputmode="decimal"
+                        autocomplete="off"
+                    >
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <!-- Archivo JavaScript -->
+    <script src="main.js" defer></script>
+
 </body>
 </html>
