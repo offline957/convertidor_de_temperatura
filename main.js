@@ -8,7 +8,7 @@ const temperaturas = {
 
 // Convierte un valor a Celsius, independientemente
 // de la unidad de entrada.
-const convertirACelsius = (valor, unidad)=>{
+const degresConverterToCelsius = (valor, unidad)=>{
   switch(unidad){
     case "celsius":
       return valor; 
@@ -36,6 +36,7 @@ const formatear = (valor) => {
 // Redondeamos a 3 decimales y eliminamos ceros innecesarios.
   return Number(valor.toFixed(3)).toString();
 };
+
 const limpiarResultados = (unidadOrigen) => {
   Object.entries(temperaturas).forEach(([unidad, elemento]) => {
     if (unidad !== unidadOrigen){
@@ -43,40 +44,57 @@ const limpiarResultados = (unidadOrigen) => {
     }
   });
 };
+const handlerDegressValidator = () => {
+  return { 
+    inputValidator: async ({valorTexto, valor}, unidadOrigen) => {
+      if (valorTexto == ""){
+        limpiarResultados(unidadOrigen);
+        //TODO: this validation should be toss in the browser side as well
+        throw new Error("Wrong ingress value");
+      }
+      if (!Number.isFinite(valor)) {
+        //TODO: this validation should be toss in the browser side as well
+        limpiarResultados(unidadOrigen);
+        throw new Error("Wrong ingress value");
+      }
+    },
+    degresValidator: async (convertedDegres, unidadOrigen) => {
+    //TODO: this validation should be toss in the browser side as well
+    if (convertedDegres < -273.15){
+      limpiarResultados(unidadOrigen);
+      throw new Error("Wrong ingress value");
+    }
+    }
+  }
+}
+
+const htmlInputWriter = (resultados, unidadOrigen) => {
+  Object.entries(temperaturas).forEach(([unidad, elemento])=> {
+    if (unidad !== unidadOrigen){
+      elemento.value = formatear(resultados[unidad]);
+    }
+  });
+} 
 // Maneja los eventos de los campos.
-const actualizarTemperaturas = (e) =>{
+const degresConverterHandler = async (e) =>{
+  try {
+  const validators = handlerDegressValidator()
   const unidadOrigen = e.target.id;
   const valorTexto = e.target.value.trim();
-  // Evitamos procesar campos vacíos.
-if (valorTexto == ""){
-  return;
-}
+  const valor = Number(valorTexto);
+  await validators.inputValidator({valor, valorTexto}, unidadOrigen)
 
-const valor = Number(valorTexto);
+  const celsiusValue = degresConverterToCelsius(valor, unidadOrigen);
+  await validators.degresValidator(celsiusValue, unidadOrigen)
 
-  // Validamos que sea un número válido.
-if (!Number.isFinite(valor)) {
-  limpiarResultados(unidadOrigen);
-  return;
-}
-  // Convertimos primero a Celsius.
-const valorCelsius = convertirACelsius(valor, unidadOrigen);
-  // El cero absoluto es -273.15 °C.
-if (valorCelsius < -273.15){
-  limpiarResultados(unidadOrigen);
-  return;
-}
-  // Calculamos las tres temperaturas.
-const resultados = convertirTemperatura(valorCelsius);
-
-  // Actualizamos los campos, respetando el campo de origen.
-Object.entries(temperaturas).forEach(([unidad, elemento])=> {
-  if (unidad !== unidadOrigen){
-    elemento.value = formatear(resultados[unidad]);
+  const resultados = convertirTemperatura(celsiusValue);
+  htmlInputWriter(resultados, unidadOrigen)
+  } catch (error) {
+    console.log("handler error", error)
   }
-});
 };
+
 // Registramos los eventos.
 Object.values(temperaturas).forEach((elemento) =>{
-  elemento.addEventListener("input", actualizarTemperaturas)
+  elemento.addEventListener("input", degresConverterHandler)
 });
